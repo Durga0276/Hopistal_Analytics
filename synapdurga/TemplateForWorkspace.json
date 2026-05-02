@@ -181,6 +181,250 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/datavisual')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "dept_load",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "root/Hopistal_Analystics/Gold/department_load",
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"preCopyScript": "truncate table [dbo].[dept_load]",
+								"writeBehavior": "Insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dept_load",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tb_dept_ld",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "doctor_stat",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dept_load",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "root/Hopistal_Analystics/Gold/doctor_effiency",
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"preCopyScript": "truncate table [dbo].[doctor_Stat]",
+								"writeBehavior": "Insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "doctor_stat",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tb_doc_stat",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "treat_sum",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "doctor_stat",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "root/Hopistal_Analystics/Gold/treatment_summary",
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlPoolSink",
+								"preCopyScript": "truncate table [dbo].[treat_summary]",
+								"writeBehavior": "Insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "department",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "department",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "treatmenttype",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "treament_type",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "count",
+											"type": "Int64",
+											"physicalType": "INT_64"
+										},
+										"sink": {
+											"name": "count_patient",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "treat_sum",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tb_treat_sum",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/dept_load')]",
+				"[concat(variables('workspaceId'), '/datasets/tb_dept_ld')]",
+				"[concat(variables('workspaceId'), '/datasets/doctor_stat')]",
+				"[concat(variables('workspaceId'), '/datasets/tb_doc_stat')]",
+				"[concat(variables('workspaceId'), '/datasets/treat_sum')]",
+				"[concat(variables('workspaceId'), '/datasets/tb_treat_sum')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/silver2gold')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -214,6 +458,222 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/databricklinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dept_load')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "synapdurga-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "root/Hopistal_Analystics/Gold/department_load",
+						"fileSystem": "ex-metastore"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "department",
+						"type": "UTF8"
+					},
+					{
+						"name": "Dailypatients",
+						"type": "INT_64"
+					},
+					{
+						"name": "avgwaittime",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/synapdurga-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/doctor_stat')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "synapdurga-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "root/Hopistal_Analystics/Gold/doctor_effiency",
+						"fileSystem": "ex-metastore"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "Doctorid",
+						"type": "UTF8"
+					},
+					{
+						"name": "Dailypatients",
+						"type": "INT_64"
+					},
+					{
+						"name": "avg_duration",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/synapdurga-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/tb_dept_ld')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "department",
+						"type": "varchar"
+					},
+					{
+						"name": "Dailypatients",
+						"type": "varchar"
+					},
+					{
+						"name": "avgwaittime",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "dept_load"
+				},
+				"sqlPool": {
+					"referenceName": "synqsqldb",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/synqsqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/tb_doc_stat')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "Doctorid",
+						"type": "varchar"
+					},
+					{
+						"name": "Dailypatients",
+						"type": "varchar"
+					},
+					{
+						"name": "avg_duration",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "doctor_Stat"
+				},
+				"sqlPool": {
+					"referenceName": "synqsqldb",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/synqsqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/tb_treat_sum')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlPoolTable",
+				"schema": [
+					{
+						"name": "department",
+						"type": "varchar"
+					},
+					{
+						"name": "treament_type",
+						"type": "varchar"
+					},
+					{
+						"name": "count_patient",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "treat_summary"
+				},
+				"sqlPool": {
+					"referenceName": "synqsqldb",
+					"type": "SqlPoolReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sqlPools/synqsqldb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/treat_sum')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "synapdurga-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "root/Hopistal_Analystics/Gold/treatment_summary",
+						"fileSystem": "ex-metastore"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "department",
+						"type": "UTF8"
+					},
+					{
+						"name": "treatmenttype",
+						"type": "UTF8"
+					},
+					{
+						"name": "count",
+						"type": "INT_64"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/synapdurga-WorkspaceDefaultStorage')]"
 			]
 		},
 		{
@@ -331,16 +791,36 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Visual_')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"policy": {
-					"elapsedTimeMetric": {}
+				"content": {
+					"query": "create table treat_summary(department varchar(50),\ntreament_type varchar(20),\ncount_patient varchar(10))",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "synqsqldb",
+						"poolName": "synqsqldb"
+					},
+					"resultLimit": 5000
 				},
-				"annotations": []
+				"type": "SqlQuery"
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/synqsqldb')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "centralindia"
 		}
 	]
 }

@@ -161,6 +161,44 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "department",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "department",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "treatmenttype",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "treament_type",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "count",
+									"type": "Int64",
+									"physicalType": "INT_64"
+								},
+								"sink": {
+									"name": "count_patient",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,

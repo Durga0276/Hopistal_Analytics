@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "synapdurga"
+		},
+		"synapdurga-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:synapdurga.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"keyaccess_properties_typeProperties_baseUrl": {
+			"value": "https://Synaccesstoken.vault.azure.net/"
+		},
+		"synapdurga-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://meadls.dfs.core.windows.net"
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "tb_treat_sum",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "department",
+				"type": "varchar"
+			},
+			{
+				"name": "treament_type",
+				"type": "varchar"
+			},
+			{
+				"name": "count_patient",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "treat_summary"
+		},
+		"sqlPool": {
+			"referenceName": "synqsqldb",
+			"type": "SqlPoolReference"
+		}
+	}
+}

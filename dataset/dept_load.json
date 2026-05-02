@@ -1,0 +1,33 @@
+{
+	"name": "dept_load",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapdurga-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "root/Hopistal_Analystics/Gold/department_load",
+				"fileSystem": "ex-metastore"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "department",
+				"type": "UTF8"
+			},
+			{
+				"name": "Dailypatients",
+				"type": "INT_64"
+			},
+			{
+				"name": "avgwaittime",
+				"type": "DOUBLE"
+			}
+		]
+	}
+}

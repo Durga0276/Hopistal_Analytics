@@ -1,0 +1,29 @@
+{
+	"name": "tb_doc_stat",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "Doctorid",
+				"type": "varchar"
+			},
+			{
+				"name": "Dailypatients",
+				"type": "varchar"
+			},
+			{
+				"name": "avg_duration",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "doctor_Stat"
+		},
+		"sqlPool": {
+			"referenceName": "synqsqldb",
+			"type": "SqlPoolReference"
+		}
+	}
+}

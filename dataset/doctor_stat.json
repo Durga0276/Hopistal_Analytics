@@ -1,0 +1,33 @@
+{
+	"name": "doctor_stat",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapdurga-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "root/Hopistal_Analystics/Gold/doctor_effiency",
+				"fileSystem": "ex-metastore"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Doctorid",
+				"type": "UTF8"
+			},
+			{
+				"name": "Dailypatients",
+				"type": "INT_64"
+			},
+			{
+				"name": "avg_duration",
+				"type": "DOUBLE"
+			}
+		]
+	}
+}

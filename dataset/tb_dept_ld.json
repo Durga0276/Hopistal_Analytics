@@ -1,0 +1,29 @@
+{
+	"name": "tb_dept_ld",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "department",
+				"type": "varchar"
+			},
+			{
+				"name": "Dailypatients",
+				"type": "varchar"
+			},
+			{
+				"name": "avgwaittime",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "dept_load"
+		},
+		"sqlPool": {
+			"referenceName": "synqsqldb",
+			"type": "SqlPoolReference"
+		}
+	}
+}

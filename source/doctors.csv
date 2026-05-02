@@ -1,0 +1,21 @@
+DoctorID,Name,Speciality,Department
+D001,Dr_1,Neurology,Cardiology
+D002,Dr_2,Neurology,Cardiology
+D003,Dr_3,Cardiology,Cardiology
+D004,Dr_4,General Medicine,Cardiology
+D005,Dr_5,Orthopedics,Cardiology
+D006,Dr_6,Neurology,Neurology
+D007,Dr_7,Orthopedics,Neurology
+D008,Dr_8,Neurology,Neurology
+D009,Dr_9,General Medicine,Neurology
+D010,Dr_10,Neurology,Neurology
+D011,Dr_11,Neurology,Orthopedics
+D012,Dr_12,Orthopedics,Orthopedics
+D013,Dr_13,Cardiology,Orthopedics
+D014,Dr_14,General Medicine,Orthopedics
+D015,Dr_15,Cardiology,Orthopedics
+D016,Dr_16,General Medicine,General Medicine
+D017,Dr_17,Cardiology,General Medicine
+D018,Dr_18,Cardiology,General Medicine
+D019,Dr_19,Cardiology,General Medicine
+D020,Dr_20,Cardiology,General Medicine

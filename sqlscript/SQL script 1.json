@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "create table treat_summary(department varchar(50),\ntreament_type varchar(20),\ncount_patient varchar(10))",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synqsqldb",
+				"poolName": "synqsqldb"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
